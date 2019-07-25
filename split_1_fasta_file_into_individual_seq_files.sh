@@ -1,0 +1,2 @@
+# Used to break the one bid file with all fasta sequences into individual files.
+awk 'BEGIN {n_seq=0;} /^>/ {if(n_seq%1==0){file=sprintf("myseq%d.fasta",n_seq);} print >> file; n_seq++; next;} { print >> file; }' < query_list.fasta

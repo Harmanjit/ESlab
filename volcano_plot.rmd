@@ -1,0 +1,64 @@
+---
+title: "Volcano plot"
+author: "Harmanjit Singh Bansal"
+date: "`r Sys.Date()`"
+output: 
+    html_document: 
+        code_folding: hide
+        fig_caption: yes
+        fig_height: 4
+        fig_width: 8
+        fontsize: 10pt
+        toc_float: 
+        collapsed: false    
+        smooth_scroll: FALSE
+editor_options: 
+  chunk_output_type: console
+---
+
+# First CHunk has all the important libraires you might be using in your plotting
+
+```{r load_lib, warning=FALSE, message=FALSE, eval=TRUE}
+
+library(easypackages)
+libraries("magrittr", "tidyverse", "ggrepel", "svglite")
+
+# HSB uses this theme to homogenize all his plots, this is not necessary
+source("R/ggtheme_jack.R")
+ggplot2::theme_set(theme_jack()) 
+
+
+```
+
+# This chunk is the data reading and wrangling 
+
+```{r resampling, warning=FALSE, message=FALSE, eval=TRUE}
+
+resample <- read.csv("raw/msm_TML/msm_relKO_library_triplicate.csv")
+resample %>% names()
+
+```
+
+# Volcano Plot
+
+```{r resampling, warning=FALSE, message=FALSE, eval=TRUE}
+
+resample %>%
+    ggplot(aes(
+        x = log2FC,
+        y = -log10(Adj..p.value + 0.01)
+    )) +
+    geom_point( alpha = 0.5 ) +
+    geom_hline(yintercept = 1.3, alpha = 0.25) +
+    ylim(-0.02, 2.2) +
+    geom_text_repel(
+        data          = subset(resample, Adj..p.value < 0.1),
+        aes(label     = Name),
+        size          = 5,
+        box.padding   = 0.5,
+        point.padding = 0.5,
+        segment.color = "grey50") +
+    ggsave("plots/resampling_volcano.png", width = 5, height = 5, units = "in")
+
+```
+

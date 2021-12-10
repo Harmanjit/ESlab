@@ -1,0 +1,5 @@
+The linux thinks that the entuire system is it's own property.
+That is why you can access the files in the C drive in the mount folder in the ubuntu.
+
+cd /mnt/c/Users/hsb2002/
+
